@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Handleiding Beeldvergelijker</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+
+    <style>
+        /* Extra styling specifiek voor de handleiding om het leesbaar te houden */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .manual-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        h1 { color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        /*h2 { color: #34495e; margin-top: 30px; } */
+        h3 { color: #555; margin-top: 20px; }
+
+        .example-box {
+            background: #f8f9fa;
+            border-left: 4px solid #007bff;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+
+        .icon-inline {
+            vertical-align: middle;
+            font-size: 1.2em;
+        }
+
+        code {
+            background-color: #eee;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+
+        .ui-element {
+            display: inline-block;
+            margin: 0 5px;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body>
+
+ <header class="app-bar">
+        <div class="app-bar-content">
+            <span class="material-icons">compare</span>
+            <h1>NK image matcher</h1>
+        </div>
+        <div class="app-bar-actions">
+            <span class="selection-count">
+                <span class="material-icons">check_circle</span>
+                <span id="selectionCount">0</span> selected
+            </span>
+        </div>
+    </header>
+
+    <div class="controls-bar">
+        <div class="search-container">
+            <span class="material-icons">search</span>
+            <input type="text" id="objInput" placeholder="Ga naar NK-nummer (bv. NK1234)..." autocomplete="off">
+            <button id="btnSearchObj" class="icon-btn" title="Ga naar object">
+                <span class="material-icons">arrow_forward</span>
+            </button>
+        </div>
+
+        <div class="control-actions">
+            <button id="downloadBtn" class="btn btn-primary">
+                <span class="material-icons">download</span>
+                Download Selections
+            </button>
+            <button id="clearSelectionsBtn" class="btn btn-secondary">
+                <span class="material-icons">delete_outline</span>
+                Clear All
+            </button>
+        </div>
+    </div>
+
+
+
+    <nav class="pagination">
+        <a href="dinov2-base_DHM_images_split_yolo_detect_images_to_match_NK1.html" class="page-btn disabled">
+            <span class="material-icons">first_page</span>
+        </a>
+
+        <a href="#" class="page-btn disabled">
+            <span class="material-icons">chevron_left</span>
+        </a>
+
+        <span class="page-info">Page 0 of 1465 (8233 items)</span>
+
+        <a href="dinov2-base_DHM_images_split_yolo_detect_images_to_match_NK1.html" class="page-btn ">
+            <span class="material-icons">chevron_right</span>
+        </a>
+
+        <a href="dinov2-base_DHM_images_split_yolo_detect_images_to_match_nk291.html" class="page-btn ">
+            <span class="material-icons">last_page</span>
+        </a>
+    </nav>
+
+<div class="manual-container">
+
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h1>NK-DHM Beeldvergelijker</h1>
+    </div>
+
+    <p>Deze tool helpt bij het visueel matchen van objecten uit de <strong><a href="https://wo2.collectienederland.nl">NK-collectie</a></strong> met afbeeldingen uit de <strong><a href="https://www.dhm.de/datenbank/ccp/dhm_ccp_add.php">DHM-set</a></strong>. </p>
+
+    <h3>Navigatie</h3>
+    <ul>
+        <li>De resultaten zijn gegroepeerd per NK-nummer. Er is één pagina per object of objectset, bv. de pagina NK1393 geeft alle onderdelen van de set.</li>
+        <li>Zoek op NK-nummer (bv. NK1393 of NK1393-A) via de zoekbalk bovenaan</li>
+        <li>Rechts elke foto van het object worden de best gelijkende beelden uit de DHM collectie getoond.</li>
+    </ul>
+
+        <h3>Controle</h3>
+    <ul>
+        <li>Hou je muis boven ene beeld om het te vergroten</li>
+        <li>Klik op een NK-nummer om het object op de website van RCE te bekijken</li>
+        <li>Klik op een DHM nummer onder een foto om het record in de DHM database te bekijken.</li>
+    </ul>
+
+     <h3>Selectie</h3>
+    <ul>
+        <li>Klik op een DHM-beeld om een match vast te leggen. Je selectie wordt bijgehouden (zie teller recht boven)</li>
+        <li>Klik op 'Download selections ' om je selecties te downloaden als een CSV bestand.</li>
+        <li>Door op 'Clear all' te klikken worden alle selecties verwijderd..</li>
+    </ul>
+
+
+    </div>
+
+</div>
+
+</body>
+</html>

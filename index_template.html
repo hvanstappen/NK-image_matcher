@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Handleiding Beeldvergelijker</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <style>
+        /* Specifieke styling voor de handleiding */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.5;
+            color: #333;
+            background-color: #f5f5f5;
+            margin: 0;
+            /*padding: 20px;*/
+            font-size: 0.9em;
+        }
+
+        .manual-container {
+            max-width: 80%;
+            margin: 40px auto;
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+       /* h1 { color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 15px; margin-top: 0; } */
+        h3 { color: #2c3e50; margin-top: 25px; display: flex; align-items: center; gap: 10px; }
+
+        .hero-section {
+            text-align: center;
+            padding: 20px 0 40px 0;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 20px;
+        }
+
+        .btn-start {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background-color: #1976d2;
+            color: white;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: 500;
+            font-size: 1.1em;
+            transition: background 0.2s;
+            margin-top: 20px;
+        }
+        .btn-start:hover { background-color: #1565c0; }
+
+        ul { padding-left: 20px; }
+        li { margin-bottom: 8px; }
+    </style>
+</head>
+<body>
+
+<header class="app-bar">
+    <div class="app-bar-content">
+        <span class="material-icons">compare</span>
+        <h1>NK image matcher</h1>
+    </div>
+
+    <div class="search-container header-search">
+        <span class="material-icons">search</span>
+        <input type="text" id="objInput" list="nk_numbers" placeholder="Zoek NK-nummer..." autocomplete="off">
+        <datalist id="nk_numbers"></datalist>
+        <button id="btnSearchObj" class="icon-btn" title="Ga naar object">
+            <span class="material-icons">arrow_forward</span>
+        </button>
+    </div>
+
+    <div class="header-actions-group">
+
+        <span class="selection-count">
+            <span class="material-icons">check_circle</span>
+            <span id="selectionCount">0</span> geselecteerd
+        </span>
+
+        <div class="button-group">
+            <button id="downloadBtn" class="btn btn-primary compact-btn" title="Download selecties">
+                <span class="material-icons">download</span>
+                <span class="btn-text">Download</span>
+            </button>
+
+            <button id="clearSelectionsBtn" class="btn btn-primary compact-btn" title="Wis alle selecties">
+                <span class="material-icons">delete_outline</span>
+                <span class="btn-text">Wis</span>
+            </button>
+        </div>
+    </div>
+</header>
+
+    <div class="manual-container">
+
+        <div class="hero-section">
+            <h1>NK-DHM Beeldvergelijker</h1>
+            <p>
+                Deze applicatie helpt bij het vinden van visuele matches
+                tussen de <strong><a href="https://wo2.collectienederland.nl" target="_blank">NK-collectie (RCE)</a></strong>
+                <br>en de <strong><a href="https://www.dhm.de/datenbank/ccp/dhm_ccp_add.php" target="_blank">Datenbank zum "Central Collecting Point München (DHM)"</a></strong>.
+            </p>
+        </div>
+
+        <h3><span class="material-icons">explore</span> Navigatie &amp; en selectie</h3>
+        <ul>
+            <li>De resultaten zijn gegroepeerd per <strong>NK-nummer</strong>. Er is één pagina per object (of set).</li>
+            <li>Gebruik de zoekbalk hierboven of in de applicatie om direct naar een nummer te springen.</li>
+            <li>Links staat een NK-bronbeeld, rechts de matches uit de DHM-collectie.</li>
+            <li>Ga met pijltjestoetsen naar een volgende match of een volgend beeld.</li>
+        </ul>
+
+        <h3><span class="material-icons">visibility</span> Controle &amp; preview</h3>
+        <ul>
+            <li>Houd je muis boven een klein beeld om een vergroting te zien.</li>
+            <li>Klik op het NK-nummer om het object op de RCE-website te bekijken.</li>
+            <li>Klik op het DHM-nummer onder een match om de het record in de DHM-database te openen.</li>
+        </ul>
+
+        <h3><span class="material-icons">check_circle</span> Selectie &amp; download</h3>
+        <ul>
+            <li>Klik op een DHM-beeld (of het vinkje) om een match te bevestigen.</li>
+            <li>De teller rechtsboven houdt het aantal selecties bij.</li>
+            <li>Gebruik <strong>Download Selections</strong> om alle selecties als CSV-bestand te bewaren.</li>
+            <li><strong>Let op!</strong> selecties gaan verloren als de browser wordt afgesloten.</li>
+        </ul>
+
+
+         <p style="text-align: center; margin-top: 40px; color: #888;">
+         <a href="{{html_name}}_{{ first_base }}.html" class="btn-start">
+                Start met het eerste object
+                <span class="material-icons">arrow_forward</span>
+            </a>
+            <p>
+              <p style="text-align: center; margin-top: 40px; color: #888; font-size: 0.9em;">
+            Gegenereerde configuratie: {{ html_name }}<br>
+            Totaal aantal objecten: {{ total_groups }}
+        </p>
+
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const input = document.getElementById('objInput');
+        const btn = document.getElementById('btnSearchObj');
+        const dataList = document.getElementById('nk_numbers');
+
+        // Variabelen ingevuld door Python
+        const filePrefix = "{{ html_name }}";
+        const validBases = {{ all_bases_json|safe }};
+
+        // 1. Autocomplete vullen
+        if (dataList && validBases.length > 0) {
+            const fragment = document.createDocumentFragment();
+            validBases.forEach(function(base) {
+                const option = document.createElement('option');
+                option.value = base;
+                fragment.appendChild(option);
+            });
+            dataList.appendChild(fragment);
+        }
+
+        // 2. Navigatie logica
+        function navigateToBase() {
+            let val = input.value.trim();
+            if (!val) return;
+
+            // Haal base uit input (voor het geval er -01 achter staat)
+            let base = val.split('-')[0];
+            base = base.replace(/\//g, "_").replace(/\\/g, "_");
+
+            if (validBases.includes(base)) {
+                window.location.href = filePrefix + "_" + base + ".html";
+            } else {
+                alert("Object nummer '" + base + "' niet gevonden.");
+            }
+        }
+
+        if(btn) btn.addEventListener('click', navigateToBase);
+        if(input) input.addEventListener('keypress', (e) => { if (e.key === 'Enter') navigateToBase(); });
+    });
+    </script>
+</body>
+</html>

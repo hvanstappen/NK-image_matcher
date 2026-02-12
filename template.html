@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Matching - Page {{ current_page }} of {{ total_pages }}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- App Bar -->
+<header class="app-bar">
+    <div class="app-bar-content">
+        <span class="material-icons">compare</span>
+        <h1>NK image matcher</h1>
+    </div>
+
+    <div class="search-container header-search">
+        <span class="material-icons">search</span>
+        <input type="text" id="objInput" list="nk_numbers" placeholder="Zoek NK-nummer..." autocomplete="off">
+        <datalist id="nk_numbers"></datalist>
+        <button id="btnSearchObj" class="icon-btn" title="Ga naar object">
+            <span class="material-icons">arrow_forward</span>
+        </button>
+    </div>
+
+    <div class="header-actions-group">
+
+        <span class="selection-count">
+            <span class="material-icons">check_circle</span>
+            <span id="selectionCount">0</span> selected
+        </span>
+
+        <div class="button-group">
+            <button id="downloadBtn" class="btn btn-primary compact-btn" title="Download Selecties">
+                <span class="material-icons">download</span>
+                <span class="btn-text">Download</span>
+            </button>
+
+            <button id="clearSelectionsBtn" class="btn btn-primary compact-btn" title="Wis alles">
+                <span class="material-icons">delete_outline</span>
+                <span class="btn-text">Clear</span>
+            </button>
+        </div>
+    </div>
+</header>
+
+
+    <!-- Pagination Top -->
+
+    <nav class="pagination">
+        <a href="{{html_name}}_{{ first_base }}.html" class="page-btn {% if current_page == 1 %}disabled{% endif %}">
+            <span class="material-icons">first_page</span>
+        </a>
+
+        <a href="{% if prev_base %}{{html_name}}_{{ prev_base }}.html{% else %}#{% endif %}" class="page-btn {% if current_page == 1 %}disabled{% endif %}">
+            <span class="material-icons">chevron_left</span>
+        </a>
+
+        <span class="page-info">Page {{ current_page }} of {{ total_pages }} ({{ total_items }} items)</span>
+
+        <a href="{% if next_base %}{{html_name}}_{{ next_base }}.html{% else %}#{% endif %}" class="page-btn {% if current_page == total_pages %}disabled{% endif %}">
+            <span class="material-icons">chevron_right</span>
+        </a>
+
+        <a href="{{html_name}}_{{ last_base }}.html" class="page-btn {% if current_page == total_pages %}disabled{% endif %}">
+            <span class="material-icons">last_page</span>
+        </a>
+    </nav>
+
+    <!-- Keyboard Help -->
+    <!--
+    <div class="keyboard-help">
+        <span class="material-icons">keyboard</span>
+        <span><kbd>←</kbd><kbd>→</kbd> Navigate matches</span>
+        <span><kbd>↑</kbd><kbd>↓</kbd> Navigate items</span>
+        <span><kbd>Enter</kbd> Select</span>
+        <span><kbd>/</kbd> Search</span>
+    </div> -->
+
+    <!-- Main Content -->
+    <main id="itemsContainer">
+        {% for item in items %}
+        <article class="item-card" 
+                 data-index="{{ item.index }}" 
+                 data-object-number="{{ item.object_number }}"
+                 data-source-filename="{{ item.source_filename }}">
+            
+            <div class="item-header" style="justify-content: flex-start; gap: 20px;">
+                <h2 class="object-number"> <a href="{{ item.obj_NK_url }}" target="_blank">{{ item.object_number }}</a></h2>
+                <span class="item-meta">{{ item.obj_metadata }}</span>
+
+            </div>
+            
+            <div class="item-content">
+                <div class="source-section">
+    <img class="source-img"
+         src="{{ item.source_path }}"
+         alt="{{ item.object_number }}"
+         loading="lazy">
+
+    <div class="hover-preview">
+        <img src="{{ item.source_path }}" alt="Preview">
+    </div>
+    <div class="source-filename">{{ item.source_filename }}</div>
+</div>
+                
+                <div class="matches-section">
+                    <div class="matches-slider" data-item-index="{{ item.index }}">
+                        {% for match in item.matches %}
+                        <div class="match-card" 
+                             data-match-index="{{ loop.index0 }}"
+                             data-filename="{{ match.filename }}"
+                             data-base="{{ match.base }}"
+                             data-similarity="{{ match.similarity }}"
+                             tabindex="0">
+                            <img src="{{ match.path }}" 
+                                 alt="{{ match.base }}"
+                                 loading="lazy">
+
+                            <!-- new -->
+                            <div class="hover-preview">
+        <img src="{{ match.path }}" alt="Preview - {{ match.base }}">
+    </div>
+    <!-- / new -->
+                            <div class="match-info">
+                                <a href="{{ match.url }}" target="_blank" class="match-id">{{ match.base }}</a>
+                                <div class="similarity-bar">
+                                    <div class="similarity-fill" style="width: {{ (match.similarity * 100)|round }}%"></div>
+                                </div>
+                                <span class="similarity-value">{{ "%.1f"|format(match.similarity * 100) }}%</span>
+                            </div>
+                            <div class="match-checkbox">
+                                <span class="material-icons">check_circle</span>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </article>
+        {% endfor %}
+    </main>
+
+    <!-- Pagination Bottom -->
+    <nav class="pagination">
+        <a href="{{html_name}}_{{ first_base }}.html" class="page-btn {% if current_page == 1 %}disabled{% endif %}">
+            <span class="material-icons">first_page</span>
+        </a>
+
+        <a href="{% if prev_base %}{{html_name}}_{{ prev_base }}.html{% else %}#{% endif %}" class="page-btn {% if current_page == 1 %}disabled{% endif %}">
+            <span class="material-icons">chevron_left</span>
+        </a>
+
+        <span class="page-info">Page {{ current_page }} of {{ total_pages }} ({{ total_items }} items)</span>
+
+        <a href="{% if next_base %}{{html_name}}_{{ next_base }}.html{% else %}#{% endif %}" class="page-btn {% if current_page == total_pages %}disabled{% endif %}">
+            <span class="material-icons">chevron_right</span>
+        </a>
+
+        <a href="{{html_name}}_{{ last_base }}.html" class="page-btn {% if current_page == total_pages %}disabled{% endif %}">
+            <span class="material-icons">last_page</span>
+        </a>
+    </nav>
+
+    <!-- Image Preview Modal -->
+    <div id="previewModal" class="modal">
+        <div class="modal-content">
+            <img id="previewImage" src="" alt="Preview">
+            <button id="closePreview" class="icon-btn">
+                <span class="material-icons">close</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
+
+    <!-- GLOBAL HOVER PREVIEW (outside all cards & containers) -->
+<div id="hover-preview" class="hover-preview">
+    <img src="" alt="">
+</div>
+
+
+    <script src="script.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const input = document.getElementById('objInput');
+    const btn = document.getElementById('btnSearchObj');
+    const dataList = document.getElementById('nk_numbers'); // Verwijzing naar de datalist
+
+    // Variabelen vanuit Python
+    const filePrefix = "{{ html_name }}";
+    const validBases = {{ all_bases_json|safe }};
+
+    // ---------------------------------------------------------
+    // 1. AUTOCOMPLETE OPBOUWEN
+    // ---------------------------------------------------------
+    // We maken dynamisch de <option> tags aan. Dit is efficiënter
+    // dan ze hardcoded in de HTML te zetten.
+    if (dataList && validBases.length > 0) {
+        const fragment = document.createDocumentFragment();
+        validBases.forEach(function(base) {
+            const option = document.createElement('option');
+            option.value = base;
+            fragment.appendChild(option);
+        });
+        dataList.appendChild(fragment);
+    }
+
+    // ---------------------------------------------------------
+    // 2. NAVIGATIE LOGICA
+    // ---------------------------------------------------------
+    function navigateToBase() {
+        let val = input.value.trim();
+        if (!val) return;
+
+        let base = val.split('-')[0];
+        base = base.replace(/\//g, "_").replace(/\\/g, "_");
+
+        if (validBases.includes(base)) {
+            window.location.href = filePrefix + "_" + base + ".html";
+        } else {
+            if (typeof showToast === 'function') {
+                showToast("Object nummer '" + base + "' niet gevonden.", "error");
+            } else {
+                alert("Object nummer '" + base + "' niet gevonden.");
+            }
+        }
+    }
+
+    if(btn) btn.addEventListener('click', navigateToBase);
+
+    if(input) {
+        input.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') navigateToBase();
+        });
+
+        // Optioneel: Als de gebruiker een optie uit de lijst klikt, direct navigeren
+        input.addEventListener('input', function(e) {
+            // Check of de huidige input exact overeenkomt met een geldige base
+            // (Dit zorgt voor directe navigatie zodra je klikt of het hele woord typt)
+            // Je kunt dit weglaten als je liever hebt dat ze eerst op Enter drukken.
+            /* let val = input.value.trim();
+            if (validBases.includes(val)) {
+                navigateToBase();
+            }
+            */
+        });
+    }
+});
+</script>
+</body>
+</html>
